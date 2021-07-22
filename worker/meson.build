@@ -150,27 +150,25 @@ openssl_dep = dependency(
   version: '>= 1.1.1'
 )
 
-nlohmann_json_dep = dependency('nlohmann_json')
+nlohmann_json_proj = subproject('nlohmann_json')
 
-libuv_dep = dependency(
+libuv_proj = subproject(
   'libuv',
   default_options: [
     'warning_level=0',
     'build_tests=false',
     'build_benchmarks=false',
   ],
-  version: '>= 1.40'
 )
-libsrtp2_dep = dependency(
+libsrtp2_proj = subproject(
   'libsrtp2',
   default_options: [
     'warning_level=0',
     'crypto-library=openssl',
     'tests=disabled',
   ],
-  version: '>= 2.3'
 )
-usrsctp_dep = dependency(
+usrsctp_proj = subproject(
   'usrsctp',
   default_options: [
     'warning_level=0',
@@ -189,10 +187,10 @@ subdir('deps/libwebrtc')
 
 dependencies = [
   openssl_dep,
-  nlohmann_json_dep,
-  libuv_dep,
-  libsrtp2_dep,
-  usrsctp_dep,
+  nlohmann_json_proj.get_variable('nlohmann_json_dep'),
+  libuv_proj.get_variable('libuv_dep'),
+  libsrtp2_proj.get_variable('libsrtp2_dep'),
+  usrsctp_proj.get_variable('usrsctp_dep'),
   netstring_dep,
   libwebrtc_dep,
 ]
@@ -200,7 +198,7 @@ dependencies = [
 if host_machine.system() == 'windows'
   subdir('dep/getopt')
   dependencies += [
-    getopt_dep
+    getopt_dep,
   ]
 endif
 
@@ -212,6 +210,13 @@ libmediasoup_worker = library(
   sources: common_sources,
   include_directories: include_directories('include'),
   cpp_args: cpp_args,
+  link_whole: [
+    libuv_proj.get_variable('libuv'),
+    libsrtp2_proj.get_variable('libsrtp2'),
+    usrsctp_proj.get_variable('usrsctp'),
+    netstring,
+    libwebrtc,
+  ],
 )
 
 executable(

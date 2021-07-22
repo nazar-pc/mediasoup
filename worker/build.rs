@@ -116,7 +116,28 @@ fn main() {
     // number of files. So instead we build in place, copy files to out directory and then clean
     // after ourselves
     {
-        // Build
+        if !Command::new("make")
+            .arg("install-meson-ninja")
+            .spawn()
+            .expect("Failed to start")
+            .wait()
+            .expect("Wasn't running")
+            .success()
+        {
+            panic!("Failed to install meson and ninja dependencies")
+        }
+
+        if !Command::new("make")
+            .arg("setup")
+            .spawn()
+            .expect("Failed to start")
+            .wait()
+            .expect("Wasn't running")
+            .success()
+        {
+            panic!("Failed to setup build directory")
+        }
+
         if !Command::new("make")
             .arg("libmediasoup-worker")
             .env("PYTHONDONTWRITEBYTECODE", "1")
@@ -130,16 +151,16 @@ fn main() {
         }
 
         for file in &[
-            "libnetstring.a",
-            "libuv.a",
-            "libopenssl.a",
-            "libsrtp.a",
-            "libusrsctp.a",
-            "libwebrtc.a",
+            // "libnetstring.a",
+            // "libuv.a",
+            // "libopenssl.a",
+            // "libsrtp.a",
+            // "libusrsctp.a",
+            // "libwebrtc.a",
             "libmediasoup-worker.a",
-            "libabseil.a",
-            #[cfg(windows)]
-            "libgetopt.a",
+            // "libabseil.a",
+            // #[cfg(windows)]
+            // "libgetopt.a",
         ] {
             std::fs::copy(
                 format!("{}/out/Release/{}", current_dir, file),
@@ -168,15 +189,15 @@ fn main() {
         }
     }
 
-    println!("cargo:rustc-link-lib=static=netstring");
-    println!("cargo:rustc-link-lib=static=uv");
-    println!("cargo:rustc-link-lib=static=openssl");
-    println!("cargo:rustc-link-lib=static=srtp");
-    println!("cargo:rustc-link-lib=static=usrsctp");
-    println!("cargo:rustc-link-lib=static=webrtc");
+    // println!("cargo:rustc-link-lib=static=netstring");
+    // println!("cargo:rustc-link-lib=static=uv");
+    // println!("cargo:rustc-link-lib=static=openssl");
+    // println!("cargo:rustc-link-lib=static=srtp");
+    // println!("cargo:rustc-link-lib=static=usrsctp");
+    // println!("cargo:rustc-link-lib=static=webrtc");
     println!("cargo:rustc-link-lib=static=mediasoup-worker");
-    println!("cargo:rustc-link-lib=static=abseil");
-    #[cfg(windows)]
-    println!("cargo:rustc-link-lib=static=getopt");
+    // println!("cargo:rustc-link-lib=static=abseil");
+    // #[cfg(windows)]
+    // println!("cargo:rustc-link-lib=static=getopt");
     println!("cargo:rustc-link-search=native={}", out_dir);
 }
