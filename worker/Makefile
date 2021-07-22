@@ -48,9 +48,8 @@ ifeq ($(MEDIASOUP_WORKER_BIN),)
 	$(MESON) compile -C $(MEDIASOUP_OUT_DIR)/$(MEDIASOUP_BUILDTYPE) mediasoup-worker
 endif
 
-# TODO: Replace with meson command and remove `configure.py` file
 xcode:
-	$(PYTHON) ./scripts/configure.py --format=xcode
+	$(MESON) setup --buildtype debug --backend xcode $(MEDIASOUP_OUT_DIR)/xcode
 
 # TODO: Potentially replace with meson and remove these scripts
 lint:
