@@ -2320,7 +2320,7 @@ namespace RTC
 
 			for (const auto& rtpStream : consumer->GetRtpStreams())
 			{
-				auto packet = consumer->GetRtcp(rtpStream, nowMs);
+				packet = consumer->GetRtcp(rtpStream, nowMs);
 
 				// Send the RTCP compound packet if there is a sender report.
 				if (packet != nullptr && packet->HasSenderReport())
