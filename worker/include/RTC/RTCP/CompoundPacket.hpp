@@ -62,6 +62,7 @@ namespace RTC
 
 			friend struct std::default_delete<RTC::RTCP::CompoundPacket>;
 			static void ReturnIntoPool(CompoundPacket* packet);
+
 		private:
 			uint8_t* header{ nullptr };
 			size_t size{ 0 };
@@ -75,13 +76,13 @@ namespace RTC
 
 namespace std
 {
-    template<>
-    struct default_delete<RTC::RTCP::CompoundPacket>
-    {
-        void operator()( RTC::RTCP::CompoundPacket* ptr ) const
-        {
-            RTC::RTCP::CompoundPacket::ReturnIntoPool(ptr);
-        }
-    };
-};
+	template<>
+	struct default_delete<RTC::RTCP::CompoundPacket>
+	{
+		void operator()(RTC::RTCP::CompoundPacket* ptr) const
+		{
+			RTC::RTCP::CompoundPacket::ReturnIntoPool(ptr);
+		}
+	};
+}; // namespace std
 #endif

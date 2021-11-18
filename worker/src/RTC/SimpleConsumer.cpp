@@ -316,7 +316,8 @@ namespace RTC
 		packet->SetSequenceNumber(origSeq);
 	}
 
-	RTC::RTCP::CompoundPacket::UniquePtr SimpleConsumer::GetRtcp(RTC::RtpStreamSend* rtpStream, uint64_t nowMs)
+	RTC::RTCP::CompoundPacket::UniquePtr SimpleConsumer::GetRtcp(
+	  RTC::RtpStreamSend* rtpStream, uint64_t nowMs)
 	{
 		MS_TRACE();
 
