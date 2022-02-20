@@ -29,8 +29,8 @@ namespace RTC
 
 		MS_ASSERT(storageItem, "storageItem cannot be nullptr");
 
-		storageItem->clonedPacket.Reset();
-		storageItem->originalPacket.Reset();
+		storageItem->clonedPacket.reset();
+		storageItem->originalPacket.reset();
 		storageItem->resentAtMs = 0;
 		storageItem->sentTimes  = 0;
 		storageItem->rtxEncoded = false;
@@ -421,9 +421,9 @@ namespace RTC
 		{
 			// Allocate a new storage item.
 			storageItem = StorageItemPool.Allocate();
-			// Memory is not initialized in any way, initialize with default values it to make sure
-			// contents is correct.
-			*storageItem = StorageItem{};
+
+			// Memory is not initialized in any way, reset it.
+			std::memset(storageItem, 0, sizeof(StorageItem));
 			MS_ASSERT(this->storageItemBuffer.Insert(seq, storageItem), "sequence number must be empty");
 
 			// Set the beginning of the used buffer.
