@@ -185,7 +185,7 @@ namespace RTC
 		this->rtxSeq = Utils::Crypto::GetRandomUInt(0u, 0xFFFF);
 	}
 
-	bool RtpStreamSend::ReceivePacket(RTC::RtpPacket* packet, RTC::RtpPacket::SharedPtr* clonedPacket)
+	bool RtpStreamSend::ReceivePacket(RTC::RtpPacket* packet, RTC::RtpPacket::SharedPtr& clonedPacket)
 	{
 		MS_TRACE();
 
@@ -385,7 +385,7 @@ namespace RTC
 		MS_ABORT("invalid method call");
 	}
 
-	void RtpStreamSend::StorePacket(RTC::RtpPacket* packet, RTC::RtpPacket::SharedPtr* clonedPacket)
+	void RtpStreamSend::StorePacket(RTC::RtpPacket* packet, RTC::RtpPacket::SharedPtr& clonedPacket)
 	{
 		MS_TRACE();
 
@@ -483,15 +483,15 @@ namespace RTC
 		}
 
 		// Only clone once and only if necessary.
-		if (!*clonedPacket)
+		if (!clonedPacket.get())
 		{
-			*clonedPacket = packet->Clone();
+			clonedPacket = packet->Clone();
 		}
 
 		// Store original packet and some extra info into the retrieved storage item.
-		storageItem->originalPacket = *clonedPacket;
-		storageItem->ssrc           = (*clonedPacket)->GetSsrc();
-		storageItem->sequenceNumber = (*clonedPacket)->GetSequenceNumber();
+		storageItem->originalPacket = clonedPacket;
+		storageItem->ssrc           = clonedPacket->GetSsrc();
+		storageItem->sequenceNumber = clonedPacket->GetSequenceNumber();
 	}
 
 	void RtpStreamSend::ClearBuffer()
