@@ -45,7 +45,7 @@ namespace RTC
 		public:
 			~StorageItemBuffer();
 
-			StorageItem* Get(uint16_t seq);
+			StorageItem* Get(uint16_t seq) const;
 			bool Insert(uint16_t seq, StorageItem* storageItem);
 			bool Remove(uint16_t seq);
 			void Clear();

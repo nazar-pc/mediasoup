@@ -36,7 +36,7 @@ namespace RTC
 		storageItem->rtxEncoded = false;
 	}
 
-	RtpStreamSend::StorageItem* RtpStreamSend::StorageItemBuffer::Get(uint16_t seq)
+	RtpStreamSend::StorageItem* RtpStreamSend::StorageItemBuffer::Get(uint16_t seq) const
 	{
 		auto idx{ static_cast<uint16_t>(seq - this->startSeq) };
 
@@ -389,6 +389,7 @@ namespace RTC
 	{
 		MS_TRACE();
 
+
 		if (packet->GetSize() > RTC::MtuSize)
 		{
 			MS_WARN_TAG(
@@ -485,7 +486,10 @@ namespace RTC
 		// Only clone once and only if necessary.
 		if (!clonedPacket.get())
 		{
-			clonedPacket = packet->Clone();
+			auto clone = packet->Clone();
+
+			// Move the RtpPacket pointer into clonedPacket shared pointer.
+			clonedPacket.swap(clone);
 		}
 
 		// Store original packet and some extra info into the retrieved storage item.
