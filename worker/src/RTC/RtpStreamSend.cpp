@@ -421,9 +421,9 @@ namespace RTC
 		{
 			// Allocate a new storage item.
 			storageItem = StorageItemPool.Allocate();
-
-			// Memory is not initialized in any way, reset it.
-			std::memset(storageItem, 0, sizeof(StorageItem));
+			// Memory is not initialized in any way, reset it. Create a new StorageItem instance
+			// in this memory.
+			new (storageItem) StorageItem{};
 			MS_ASSERT(this->storageItemBuffer.Insert(seq, storageItem), "sequence number must be empty");
 
 			// Set the beginning of the used buffer.
