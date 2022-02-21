@@ -23,7 +23,7 @@ namespace RTC
 	{
 	public:
 		using RtpPacketBuffer = std::array<uint8_t, MtuSize + 100>;
-		using SharedPtr = std::shared_ptr<RtpPacket>;
+		using SharedPtr       = std::shared_ptr<RtpPacket>;
 
 		/* Struct for RTP header. */
 		struct Header
@@ -609,7 +609,6 @@ namespace RTC
 		void ShiftPayload(size_t payloadOffset, size_t shift, bool expand = true);
 
 	private:
-
 		friend SharedPtr;
 
 		void ParseExtensions();

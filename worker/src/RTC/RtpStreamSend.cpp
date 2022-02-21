@@ -400,7 +400,6 @@ namespace RTC
 	{
 		MS_TRACE();
 
-
 		if (packet->GetSize() > RTC::MtuSize)
 		{
 			MS_WARN_TAG(
