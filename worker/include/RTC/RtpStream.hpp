@@ -159,8 +159,8 @@ namespace RTC
 		}
 
 	protected:
-		bool ReceiveStreamPacket(const RTC::RtpPacket* packet);
-		bool UpdateSeq(const RTC::RtpPacket* packet);
+		bool ReceiveStreamPacket(RTC::RtpPacket* packet);
+		bool UpdateSeq(RTC::RtpPacket* packet);
 		void UpdateScore(uint8_t score);
 		void PacketRetransmitted(RTC::RtpPacket* packet);
 		void PacketRepaired(RTC::RtpPacket* packet);

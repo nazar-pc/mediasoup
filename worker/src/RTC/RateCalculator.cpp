@@ -127,7 +127,7 @@ namespace RTC
 		}
 	}
 
-	void RtpDataCounter::Update(const RTC::RtpPacket* packet)
+	void RtpDataCounter::Update(RTC::RtpPacket* packet)
 	{
 		uint64_t nowMs = DepLibUV::GetTimeMs();
 

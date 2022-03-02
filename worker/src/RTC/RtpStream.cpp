@@ -109,7 +109,7 @@ namespace RTC
 		this->rtxStream = new RTC::RtxStream(params);
 	}
 
-	bool RtpStream::ReceiveStreamPacket(const RTC::RtpPacket* packet)
+	bool RtpStream::ReceiveStreamPacket(RTC::RtpPacket* packet)
 	{
 		MS_TRACE();
 
@@ -170,7 +170,7 @@ namespace RTC
 		}
 	}
 
-	bool RtpStream::UpdateSeq(const RTC::RtpPacket* packet)
+	bool RtpStream::UpdateSeq(RTC::RtpPacket* packet)
 	{
 		MS_TRACE();
 

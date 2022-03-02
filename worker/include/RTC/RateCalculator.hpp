@@ -92,7 +92,7 @@ namespace RTC
 		}
 
 	public:
-		void Update(const RTC::RtpPacket* packet);
+		void Update(RTC::RtpPacket* packet);
 		uint32_t GetBitrate(uint64_t nowMs)
 		{
 			return this->rate.GetRate(nowMs);
