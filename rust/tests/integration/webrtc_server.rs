@@ -10,6 +10,11 @@ use std::net::{IpAddr, Ipv4Addr};
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::Arc;
 
+#[derive(Debug, PartialEq)]
+struct CustomAppData {
+    foo: u32,
+}
+
 async fn init() -> (Worker, Worker) {
     {
         let mut builder = env_logger::builder();
@@ -51,11 +56,6 @@ fn create_webrtc_server_succeeds() {
                 }
             })
             .detach();
-
-        #[derive(Debug, PartialEq)]
-        struct CustomAppData {
-            foo: u32,
-        }
 
         let webrtc_server = worker1
             .create_webrtc_server({
@@ -103,7 +103,7 @@ fn create_webrtc_server_succeeds() {
             worker_dump.channel_message_handlers,
             ChannelMessageHandlers {
                 channel_request_handlers: vec![webrtc_server.id().into()],
-                channel_notification_handlers: vec![]
+                channel_notification_handlers: vec![],
             }
         );
 
@@ -117,14 +117,14 @@ fn create_webrtc_server_succeeds() {
             dump.udp_sockets,
             vec![WebRtcServerIpPort {
                 ip: IpAddr::V4(Ipv4Addr::LOCALHOST),
-                port: port1
+                port: port1,
             }]
         );
         assert_eq!(
             dump.tcp_servers,
             vec![WebRtcServerIpPort {
                 ip: IpAddr::V4(Ipv4Addr::LOCALHOST),
-                port: port2
+                port: port2,
             }]
         );
         assert_eq!(dump.webrtc_transport_ids, HashedSet::default());
@@ -149,11 +149,6 @@ fn create_webrtc_server_without_specifying_port_succeeds() {
                 }
             })
             .detach();
-
-        #[derive(Debug, PartialEq)]
-        struct CustomAppData {
-            foo: u32,
-        }
 
         let webrtc_server = worker1
             .create_webrtc_server({
@@ -232,11 +227,6 @@ fn unavailable_infos_fails() {
                 }
             })
             .detach();
-
-        // #[derive(Debug, PartialEq)]
-        // struct CustomAppData {
-        //     foo: u32,
-        // }
 
         // Using an unavailable listen IP.
         {

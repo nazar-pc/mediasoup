@@ -28,9 +28,9 @@ pub struct RtpCodecParametersParameters(
 impl RtpCodecParametersParameters {
     /// Insert another parameter into collection.
     pub fn insert<K, V>(&mut self, key: K, value: V) -> &mut Self
-    where
-        K: Into<Cow<'static, str>>,
-        V: Into<RtpCodecParametersParametersValue>,
+        where
+            K: Into<Cow<'static, str>>,
+            V: Into<RtpCodecParametersParametersValue>,
     {
         self.0.insert(key.into(), value.into());
         self
@@ -52,9 +52,9 @@ impl RtpCodecParametersParameters {
 }
 
 impl<K, const N: usize> From<[(K, RtpCodecParametersParametersValue); N]>
-    for RtpCodecParametersParameters
-where
-    K: Into<Cow<'static, str>>,
+for RtpCodecParametersParameters
+    where
+        K: Into<Cow<'static, str>>,
 {
     fn from(array: [(K, RtpCodecParametersParametersValue); N]) -> Self {
         IntoIterator::into_iter(array).collect()
@@ -64,7 +64,7 @@ where
 impl IntoIterator for RtpCodecParametersParameters {
     type Item = (Cow<'static, str>, RtpCodecParametersParametersValue);
     type IntoIter =
-        std::collections::btree_map::IntoIter<Cow<'static, str>, RtpCodecParametersParametersValue>;
+    std::collections::btree_map::IntoIter<Cow<'static, str>, RtpCodecParametersParametersValue>;
 
     fn into_iter(
         self,
@@ -75,10 +75,10 @@ impl IntoIterator for RtpCodecParametersParameters {
 }
 
 impl<K> Extend<(K, RtpCodecParametersParametersValue)> for RtpCodecParametersParameters
-where
-    K: Into<Cow<'static, str>>,
+    where
+        K: Into<Cow<'static, str>>,
 {
-    fn extend<T: IntoIterator<Item = (K, RtpCodecParametersParametersValue)>>(&mut self, iter: T) {
+    fn extend<T: IntoIterator<Item=(K, RtpCodecParametersParametersValue)>>(&mut self, iter: T) {
         iter.into_iter().for_each(|(k, v)| {
             self.insert(k, v);
         });
@@ -86,10 +86,10 @@ where
 }
 
 impl<K> FromIterator<(K, RtpCodecParametersParametersValue)> for RtpCodecParametersParameters
-where
-    K: Into<Cow<'static, str>>,
+    where
+        K: Into<Cow<'static, str>>,
 {
-    fn from_iter<T: IntoIterator<Item = (K, RtpCodecParametersParametersValue)>>(iter: T) -> Self {
+    fn from_iter<T: IntoIterator<Item=(K, RtpCodecParametersParametersValue)>>(iter: T) -> Self {
         Self(iter.into_iter().map(|(k, v)| (k.into(), v)).collect())
     }
 }
@@ -905,7 +905,6 @@ impl RtpParameters {
         })
     }
 
-    #[allow(dead_code)]
     pub(crate) fn into_fbs(self) -> rtp_parameters::RtpParameters {
         rtp_parameters::RtpParameters {
             mid: self.mid,
@@ -1148,8 +1147,8 @@ pub enum RtcpFeedback {
 
 impl Serialize for RtcpFeedback {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
+        where
+            S: Serializer,
     {
         let mut rtcp_feedback = serializer.serialize_struct("RtcpFeedback", 2)?;
         let (r#type, parameter) = self.as_type_parameter();
@@ -1161,8 +1160,8 @@ impl Serialize for RtcpFeedback {
 
 impl<'de> Deserialize<'de> for RtcpFeedback {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
+        where
+            D: Deserializer<'de>,
     {
         #[derive(Deserialize)]
         #[serde(field_identifier, rename_all = "lowercase")]
@@ -1183,8 +1182,8 @@ impl<'de> Deserialize<'de> for RtcpFeedback {
             }
 
             fn visit_map<V>(self, mut map: V) -> Result<Self::Value, V::Error>
-            where
-                V: MapAccess<'de>,
+                where
+                    V: MapAccess<'de>,
             {
                 let mut r#type = None::<Cow<'_, str>>;
                 let mut parameter = Cow::Borrowed("");

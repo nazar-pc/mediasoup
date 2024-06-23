@@ -3,8 +3,10 @@ use std::os::raw::c_void;
 use std::slice;
 
 #[allow(clippy::type_complexity)]
-#[allow(dead_code)]
-pub(super) struct ChannelReadCallback(Box<dyn FnMut(&[u8]) + Send + 'static>);
+pub(super) struct ChannelReadCallback(
+    // Allocated on the heap to keep around for as long as necessary for FFI call
+    #[allow(dead_code)] Box<dyn FnMut(&[u8]) + Send + 'static>,
+);
 
 pub(crate) struct PreparedChannelWrite {
     channel_write_fn: ChannelWriteFn,

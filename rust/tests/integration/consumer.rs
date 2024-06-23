@@ -291,8 +291,14 @@ fn consumer_device_capabilities() -> RtpCapabilities {
 }
 
 // Keeps executor threads running until dropped
-#[allow(dead_code)]
 struct ExecutorGuard(Vec<async_oneshot::Sender<()>>);
+
+impl Drop for ExecutorGuard {
+    fn drop(&mut self) {
+        // Just to avoid unnecessary "field `0` is never read" lint
+        self.0.drain(..);
+    }
+}
 
 fn create_executor() -> (ExecutorGuard, Arc<Executor<'static>>) {
     let executor = Arc::new(Executor::new());
@@ -456,7 +462,7 @@ fn consume_succeeds() {
                 ConsumerScore {
                     score: 10,
                     producer_score: 0,
-                    producer_scores: vec![0]
+                    producer_scores: vec![0],
                 }
             );
             assert_eq!(audio_consumer.preferred_layers(), None);
@@ -554,14 +560,14 @@ fn consume_succeeds() {
                 ConsumerScore {
                     score: 10,
                     producer_score: 0,
-                    producer_scores: vec![0, 0, 0, 0]
+                    producer_scores: vec![0, 0, 0, 0],
                 }
             );
             assert_eq!(
                 video_consumer.preferred_layers(),
                 Some(ConsumerLayers {
                     spatial_layer: 3,
-                    temporal_layer: Some(0)
+                    temporal_layer: Some(0),
                 })
             );
             assert_eq!(video_consumer.current_layers(), None);
